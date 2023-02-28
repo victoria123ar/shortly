@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { creatUrl, listUrl, redirectUrl, deleteUrl } from "../controllers/urlsController.js";
 import { validateUrl } from "../middlewares/urlsMiddleware.js";
-import { authenticationValidation } from "../middlewares/signinMiddleware.js";
+import { authenticationValidation } from "../middlewares/signInMiddleware.js";
 
 const router = Router();
 
