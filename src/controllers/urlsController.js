@@ -14,7 +14,7 @@ export async function creatUrl(req, res) {
     );
 
     const { rows: urls } = await connection.query(
-      `SELECT * FROM urls WHERE "userId" = $1`,
+      `SELECT * FROM urls WHERE "userId"=$1`,
       [user]
     );
 
@@ -29,11 +29,11 @@ export async function creatUrl(req, res) {
 
 export async function listUrl(req, res) {
   //ROTA NÃO AUTENTICADA
-  let {id} = req.params;
+  let { id } = req.params;
 
   try {
     const { rows: urls } = await connection.query(
-      "SELECT * FROM urls WHERE id = $1",
+      "SELECT * FROM urls WHERE id=$1",
       [id]
     );
 
@@ -51,7 +51,64 @@ export async function listUrl(req, res) {
   }
 }
 
-/* export async function redirectUrl(req, res) {}
+ export async function redirectUrl(req, res) {
+  //ROTA NÃO AUTENTICADA
+  const { shortUrl } = req.params;
 
-export async function deleteUrl(req, res) {}
- */
+  try {
+    const urls = await connection.query(`SELECT * FROM urls WHERE "shortUrl"=$1`,
+      [shortUrl]
+    );
+
+    if (urls.rowCount === 0) {
+      return res.sendStatus(404);
+    }
+
+    const [url] = urls.rows;
+    console.log(url);
+
+    await connection.query(`UPDATE urls SET "views" = "views" + 1 WHERE id=$1`,
+      [url.id]
+    );
+
+    res.redirect(url.url);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send(error.message);
+  }
+
+}
+
+export async function deleteUrl(req, res) {
+  //ROTA AUTENTICADA
+  const { id } = req.params;
+  const user = res.locals.user;
+  console.log("User: " + res.locals.user)
+  console.log("User2: " + user)
+  console.log("Id: " + id)
+  try {
+    const { rows: urls } = await connection.query(
+      "SELECT * FROM urls WHERE id=$1",
+      [id]
+    );
+console.log(urls)
+console.log("Id2: " + id)
+    if (urls.rowCount === 0) {
+      return res.sendStatus(404);
+    }
+
+    if (urls.userId !== user.id) {
+      return res.sendStatus(401);
+    }
+    console.log("Id3: " + id)
+    await connection.query("DELETE FROM urls WHERE id=$1", 
+    [id]
+    );
+    console.log("Id4: " + id)
+
+    res.sendStatus(204);
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+}
+

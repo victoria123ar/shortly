@@ -1,7 +1,7 @@
 import joi from "joi";
 
 export const signUpSchemma = joi.object({
-  name: joi.string().min(2).max(30).required(),
+  name: joi.string().min(2).max(50).required(),
   email: joi
     .string()
     .email({ tlds: { allow: false } })
