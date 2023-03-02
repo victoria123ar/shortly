@@ -41,11 +41,11 @@ export async function listUrl(req, res) {
       return res.sendStatus(404);
     }
 
-    const [url] = urls.rows;
-    const shortUrl = url.shortUrl;
-    const urlAdress = url.url;
+    const [urlObject] = urls.rows;
+    const shortUrl = urlObject.shortUrl;
+    const url = urlObject.url;
 
-    res.status(200).send({ id, shortUrl, urlAdress });
+    res.status(200).send({ id, shortUrl, url });
   } catch (error) {
     res.status(500).send(error.message);
   }
