@@ -32,7 +32,7 @@ export async function listUrl(req, res) {
   let { id } = req.params;
 
   try {
-    const { rows: urls } = await connection.query(
+    const urls = await connection.query(
       "SELECT * FROM urls WHERE id=$1",
       [id]
     );
@@ -41,11 +41,11 @@ export async function listUrl(req, res) {
       return res.sendStatus(404);
     }
 
-    const [urlId] = urls;
-    const shortUrl = urlId.shortUrl;
-    const url = urlId.url;
+    const [url] = urls.rows;
+    const shortUrl = url.shortUrl;
+    const urlAdress = url.url;
 
-    res.status(200).send({ id, shortUrl, url });
+    res.status(200).send({ id, shortUrl, urlAdress });
   } catch (error) {
     res.status(500).send(error.message);
   }
@@ -60,7 +60,7 @@ export async function redirectUrl(req, res) {
       `SELECT * FROM urls WHERE "shortUrl"=$1`,
       [shortUrl]
     );
-
+      console.log(urls)
     if (urls.rowCount === 0) {
       return res.sendStatus(404);
     }
@@ -93,7 +93,7 @@ export async function deleteUrl(req, res) {
     if (urls.rowCount === 0) {
       return res.sendStatus(404);
     }
-    
+
     const url = urls.rows[0]
 
     if (url.userId !== user.id) {
