@@ -22,18 +22,21 @@ export async function authenticationValidation(req, res, next) {
       return res.sendStatus(401);
     }
 
-    const user = tokenExists.rows[0].userId;
-    
+    const userId = tokenExists.rows[0].userId;
+
     const tokenValide = await connection.query(
       `SELECT * FROM users WHERE id=$1;`,
-      [user]
+      [userId]
     );
+
+    const user = tokenValide.rows[0];
 
     if (!tokenValide) {
       return res.status(401);
     }
 
-    res.locals.user = user;
+    console.log(`User: ${JSON.stringify(user)}`)
+    res.locals.user = user
 
     next();
   } catch (err) {

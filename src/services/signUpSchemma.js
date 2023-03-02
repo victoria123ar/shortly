@@ -8,7 +8,7 @@ export const signUpSchemma = joi.object({
     .required(),
   password: joi
     .string()
-    .pattern(/^[a-zA-Z0-9]{6,30}$/)
+    .pattern(/^[a-zA-Z0-9!@#$%^&*_-]{6,30}$/)
     .required(),
   confirmPassword: joi.ref("password"),
 });

@@ -6,7 +6,7 @@ export const signInSchemma = joi.object({
     .email({ tlds: { allow: false } })
     .required(),
   password: joi
-    .string()
-    .pattern(/^[a-zA-Z0-9]{6,30}$/)
-    .required(),
+  .string()
+  .pattern(/^[a-zA-Z0-9!@#$%^&*_-]{6,30}$/)
+  .required(),
 });
