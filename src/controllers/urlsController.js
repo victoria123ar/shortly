@@ -45,7 +45,7 @@ export async function listUrl(req, res) {
     const shortUrl = urlId.shortUrl;
     const url = urlId.url;
 
-    res.status(201).send({ id, shortUrl, url });
+    res.status(200).send({ id, shortUrl, url });
   } catch (error) {
     res.status(500).send(error.message);
   }
@@ -85,7 +85,7 @@ export async function deleteUrl(req, res) {
   const user = res.locals.user;
 
   try {
-    const { rows: urls } = await connection.query(
+    const urls = await connection.query(
       "SELECT * FROM urls WHERE id=$1",
       [id]
     );
@@ -93,8 +93,10 @@ export async function deleteUrl(req, res) {
     if (urls.rowCount === 0) {
       return res.sendStatus(404);
     }
+    
+    const url = urls.rows[0]
 
-    if (urls.userId !== user.id) {
+    if (url.userId !== user.id) {
       return res.sendStatus(401);
     }
 
