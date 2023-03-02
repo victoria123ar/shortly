@@ -35,7 +35,6 @@ export async function authenticationValidation(req, res, next) {
       return res.status(401);
     }
 
-    console.log(`User: ${JSON.stringify(user)}`)
     res.locals.user = user
 
     next();
