@@ -7,6 +7,7 @@ import signUpRouter from "./routes/signUpRouter.js"
 import signInRouter from "./routes/signInRouter.js"
 import urlRouter from "./routes/urlsRouter.js"
 import usersRouter from "./routes/usersRouter.js"
+import rankingRouter from "./routes/rankingRouter.js"
 
 const app = express();
 app.use(express.json());
@@ -15,6 +16,7 @@ app.use(signUpRouter);
 app.use(signInRouter);
 app.use(urlRouter);
 app.use(usersRouter);
+app.use(rankingRouter);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Servidor rodando na porta: ${port}`));
